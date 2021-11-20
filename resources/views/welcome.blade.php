@@ -50,12 +50,13 @@
                     <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
                         Текущее время: <span id="current-time"></span>
                     </div>
-                    <!--div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Текущее время: <span id="current-time"><?php echo Carbon\Carbon::now()->format('H:i:s');?></span>
+                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                        Название класса метода: <?php $controllerString = explode('\\', explode('@', request()->route()->getAction()['controller'])[0]);
+                        echo end($controllerString); ?>
                     </div>
                     <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Текущее время: <span id="current-time"><?php echo Carbon\Carbon::now()->format('H:i:s');?></span>
-                    </div-->
+                        Название метода: {{ request()->route()->getActionMethod() }}
+                    </div>
                 </div>
 
                 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
