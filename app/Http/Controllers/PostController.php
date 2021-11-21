@@ -12,7 +12,8 @@ use Vedmant\FeedReader\Tests\Unit\FeedReaderTest;
 class PostController extends Controller
 {
     public function index() {
-        return view('welcome');
+        $posts = Post::orderBy('pubDate', 'asc')->take(10)->get();
+        return view('welcome', ['posts' => $posts]);
     }
 
     /**
@@ -78,8 +79,8 @@ class PostController extends Controller
                 return [
                     'status' => 'error',
                     'error' => 'An error occurred when creating a database post record. ' .
-                        ($success) ? 'Any successful records were reverted.' :
-                        'Query failed to revert. A database error occurred.' .
+                        (($success) ? 'Any successful records were reverted.' :
+                        'Query failed to revert. A database error occurred.') .
                         PHP_EOL . PHP_EOL . $exception->getMessage()
                     ];
 

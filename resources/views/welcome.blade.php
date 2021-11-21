@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>iTunes Movie Trailers</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -17,6 +17,9 @@
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
+            }
+            .poster img {
+                max-width: 100%;
             }
         </style>
     </head>
@@ -47,21 +50,44 @@
 
                 <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
 
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                    <div class="text-center text-sm text-gray-500 sm:text-right sm:ml-0">
                         Текущее время: <span id="current-time"></span>
                     </div>
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                    <div class="text-center text-sm text-gray-500 sm:text-right sm:ml-0" style="padding: 0 16px; ">
                         Название класса метода: <?php $controllerString = explode('\\', explode('@', request()->route()->getAction()['controller'])[0]);
                         echo end($controllerString); ?>
                     </div>
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                    <div class="text-center text-sm text-gray-500 sm:text-right sm:ml-0">
                         Название метода: {{ request()->route()->getActionMethod() }}
                     </div>
                 </div>
 
                 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="p-6">
+
+                    @if (count($posts) > 0)
+                        <div class="grid grid-cols-1 md:grid-cols-2">
+                        @foreach($posts as $post)
+                            <div class="p-6">
+                                <div class="flex items-center poster">
+                                    <a href="/trailer/{{ $post->id }}">
+                                        <img src="{{ $post->image }}">
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <div class="text-lg leading-7 font-semibold">
+                                        <a href="/trailer/{{ $post->id }}" class="underline text-gray-900 dark:text-white">
+                                        {{ $post->title }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                        </div>
+                    @else
+                        <div style="color: white; padding: 16px 32px; text-align: center">В базе данных нет трейлеров.</div>
+                    @endif
+                        <!--div class="p-6">
                             <div class="flex items-center">
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                                 <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs" class="underline text-gray-900 dark:text-white">Documentation</a></div>
@@ -111,8 +137,7 @@
                                     Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline">Forge</a>, <a href="https://vapor.laravel.com" class="underline">Vapor</a>, <a href="https://nova.laravel.com" class="underline">Nova</a>, and <a href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline">Telescope</a>, and more.
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </div-->
                 </div>
 
 
