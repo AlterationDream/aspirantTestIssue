@@ -13,7 +13,13 @@ class PostController extends Controller
 {
     public function index() {
         $posts = Post::orderBy('pubDate', 'asc')->take(10)->get();
-        return view('welcome', ['posts' => $posts]);
+        return view('posts.index', ['posts' => $posts]);
+    }
+
+    public function show($id) {
+        $post = Post::find($id);
+        if (!$post) abort(404);
+        return view('posts.show', ['post' => $post]);
     }
 
     /**
