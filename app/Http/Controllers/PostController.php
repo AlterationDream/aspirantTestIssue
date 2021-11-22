@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Vedmant\FeedReader\FeedReader;
 use Vedmant\FeedReader\FeedReaderServiceProvider;
 use Vedmant\FeedReader\Tests\Unit\FeedReaderTest;
@@ -127,5 +128,33 @@ class PostController extends Controller
             }
         }
         return true;
+    }
+
+    public function like($id, Request $request) {
+        if (!\Auth::check()) {
+            $response['status'] = 'error';
+            $response['msg'] = 'Bad login.';
+        }
+
+        $post = Post::find($id);
+        if (!$post) {
+            $response['status'] = 'error';
+            $response['msg'] = 'Post not found.';
+        }
+
+        $hasLike = $post->likedUsers()->find(\Auth::user()->id);
+        if (!$hasLike) {
+            $post->likedUsers()->attach(\Auth::user()->id);
+            $response['status'] = 'success';
+            $response['newState'] = 1;
+            $response['count'] = $post->likedUsers()->count();
+            return json_encode($response);
+        }
+
+        $post->likedUsers()->detach(\Auth::user()->id);
+        $response['status'] = 'success';
+        $response['newState'] = 0;
+        $response['count'] = $post->likedUsers()->count();
+        return json_encode($response);
     }
 }
