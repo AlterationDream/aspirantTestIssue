@@ -107,7 +107,7 @@ class PostController extends Controller
         foreach ($posts as $post) {
             $post->likedUsers()->detach();
         }
-        Post::truncate();
+        Post::query()->delete();
     }
 
     /**
@@ -130,16 +130,26 @@ class PostController extends Controller
         return true;
     }
 
+    /**
+     * Register like button click.
+     *
+     * @param integer $id   Post ID
+     * @param Request $request  _token
+     *
+     * @return string JSON
+     */
     public function like($id, Request $request) {
         if (!\Auth::check()) {
             $response['status'] = 'error';
             $response['msg'] = 'Bad login.';
+            return json_encode($response);
         }
 
         $post = Post::find($id);
         if (!$post) {
             $response['status'] = 'error';
             $response['msg'] = 'Post not found.';
+            return json_encode($response);
         }
 
         $hasLike = $post->likedUsers()->find(\Auth::user()->id);
